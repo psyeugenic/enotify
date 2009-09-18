@@ -20,7 +20,7 @@ typedef struct {
 msg_error(notify_msg *nm) {
     nm->tm = 200;
     strcpy(nm->label, "ERROR!");
-    strcpy(nm->msg, "You got an error stupid.");
+    strcpy(nm->msg, "You got an error.");
 }
 
 
@@ -37,7 +37,8 @@ static unsigned int parse_int(char *buffer, unsigned int len) {
     return ret;
 }
 
-/* -----------------------------------------------------------------------
+/* 
+ * -----------------------------------------------------------------------
  * | tm x 4 bytes | label_len x 1 byte | msg_len x 4 bytes | label | msg |
  * -----------------------------------------------------------------------
  */
@@ -47,19 +48,22 @@ static int parse_msg(notify_msg *nm, char *buffer, int len) {
     unsigned int m_len;
     memset(nm, 0, sizeof(notify_msg));
     if (len < 9) {
-	fprintf(stderr, "buffer len < 9\r\n");
 	msg_error(nm);
    	return -1;
     }
+    /* dbg: 
     fprintf(stderr, "tm: {%d, %d, %d, %d}\r\n",buffer[0], buffer[1], buffer[2], buffer[3]);
     fprintf(stderr, "lm: {%d, %d, %d, %d}\r\n",buffer[5], buffer[6], buffer[7], buffer[8]);
+    */
+
     nm->tm = parse_int(buffer, 4);
     l_len  = parse_int(buffer + 4, 1);
     m_len  = parse_int(buffer + 5, 4);
+    /* dbg: 
     fprintf(stderr, "tm %d, l_len %d, m_len %d\r\n", nm->tm, l_len, m_len);
+    */
 
     if (len < (l_len + m_len + 9)) {
-	fprintf(stderr, "buffer len (%d) < 9 + %d + %d\r\n", len, l_len, m_len);
 	msg_error(nm);
    	return -1;
 
@@ -75,7 +79,9 @@ static int parse_msg(notify_msg *nm, char *buffer, int len) {
 	memcpy(nm->msg, buffer + 9 + l_len, 1022);
 	nm->msg[1023] = '\0';
     }
+    /* dbg: 
     fprintf(stderr, "parse got: tm %d, label %s, msg %s\r\n", nm->tm, nm->label, nm->msg);
+    */
 
     return 1;
 }
@@ -85,14 +91,18 @@ static ErlDrvData notify_drv_start(ErlDrvPort port, char *buff)
 {
     notify_data* d = (notify_data*)driver_alloc(sizeof(notify_data));
     notify_init("Erlang");
+    /* dbg: 
     fprintf(stderr, "notify_drv: start\r\n");
+    */
     d->port = port;
     return (ErlDrvData)d;
 }
 
 static void notify_drv_stop(ErlDrvData handle)
 {
+    /* dbg: 
     fprintf(stderr, "notify_drv: stop\r\n");
+    */
     driver_free((char*)handle);
 }
 
@@ -104,7 +114,9 @@ static void notify_drv_output(ErlDrvData handle, char *buffer, int len) {
 
     parse_msg(&nm, buffer, len);
 
+    /* dbg: 
     fprintf(stderr, "notify_drv: output %s\r\n", buffer);
+    */
 
     n = notify_notification_new(nm.label, nm.msg, NULL, NULL);
 
@@ -113,7 +125,7 @@ static void notify_drv_output(ErlDrvData handle, char *buffer, int len) {
     notify_notification_set_timeout (n, nm.tm);
 	
     if (!notify_notification_show (n, NULL)) {
-	fprintf(stderr, "failed to send notification\r\n");
+	fprintf(stderr, "Error: failed to send notification\r\n");
 	res = 1;
     }
     g_object_unref(G_OBJECT(n));
