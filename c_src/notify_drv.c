@@ -108,9 +108,12 @@ static void notify_drv_stop(ErlDrvData handle)
 
 static void notify_drv_output(ErlDrvData handle, char *buffer, int len) {
     NotifyNotification *n;
+	NotifyNotification *example;
     notify_data* d = (notify_data*)handle;
     notify_msg nm;
     char res = 0;
+	char name[40] = "Sample Notification";
+	GError *error = NULL;
 
     parse_msg(&nm, buffer, len);
 
@@ -119,10 +122,11 @@ static void notify_drv_output(ErlDrvData handle, char *buffer, int len) {
     */
 
     n = notify_notification_new(nm.label, nm.msg, NULL, NULL);
-
-    notify_notification_set_hint_int32(n, "value", 1024); 
+    notify_notification_set_timeout(n, nm.tm);
+    notify_notification_set_category(n, "erlang");
+    notify_notification_set_urgency(n, NOTIFY_URGENCY_CRITICAL);
+    //notify_notification_set_hint_int32(n, "value", 1024); 
     notify_notification_set_hint_string(n, "x-canonical-private-synchronous", "");
-    notify_notification_set_timeout (n, nm.tm);
 	
     if (!notify_notification_show (n, NULL)) {
 	fprintf(stderr, "Error: failed to send notification\r\n");
