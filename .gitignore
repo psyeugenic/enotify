@@ -1,0 +1,8 @@
+
+# Match at any level.
+*~
+
+/Makefile
+/configure
+
+/ebin
