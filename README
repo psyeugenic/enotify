@@ -1,1 +1,4 @@
-libnotify hack binding to erlang
+libnotify bindings to erlang
+
+To compile:
+autoconf && ./configure && make

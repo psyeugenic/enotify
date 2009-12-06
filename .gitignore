@@ -1,18 +1,18 @@
 
 # Match at any level.
-*~
 
-/configure
+configure
 config.*
+autoscan.log
+/autom4te.cache/*
 
 /ebin
-/c_src/*.o
 /ebin/*.so
-*.so
 
+/priv/*.so
+
+/c_src/*.o
+/c_src/Makefile
 
 /src/Makefile
-/c_src/Makefile
-autom4te.cache
-autoscan.log
 
