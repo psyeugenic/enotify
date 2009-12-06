@@ -7,8 +7,12 @@ config.*
 
 /ebin
 /c_src/*.o
+/ebin/*.so
+*.so
 
-Makefile
+
+/src/Makefile
+/c_src/Makefile
 autom4te.cache
 autoscan.log
 
