@@ -1,0 +1,34 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.64])
+AC_INIT([enotify], [1.0])
+AC_CONFIG_SRCDIR([c_src/notify_drv.c])
+AM_INIT_AUTOMAKE
+AC_CONFIG_HEADERS([config.h])
+
+GNOME_INIT
+
+# Checks for programs.
+AC_PROG_CC
+AC_ISC_POSIX
+AM_PROG_LIBTOOL
+AC_ARG_PROGRAM
+
+# Checks for libraries.
+AC_CHECK_LIB([notify], [notify_notification_new])
+
+# Checks for header files.
+AC_CHECK_HEADERS([string.h unistd.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_TYPE_SIZE_T
+
+# Checks for library functions.
+AC_CHECK_FUNCS([memset])
+
+AC_SUBST(CFLAGS)
+AC_SUBST(LDFLAGS)
+
+AC_CONFIG_FILES([Makefile c_src/Makefile src/Makefile])
+AC_OUTPUT

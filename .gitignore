@@ -4,5 +4,9 @@
 
 /Makefile
 /configure
+config.*
 
 /ebin
+
+autom4te.cache
+autoscan.log
