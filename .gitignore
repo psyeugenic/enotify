@@ -2,11 +2,13 @@
 # Match at any level.
 *~
 
-/Makefile
 /configure
 config.*
 
 /ebin
+/c_src/*.o
 
+Makefile
 autom4te.cache
 autoscan.log
+

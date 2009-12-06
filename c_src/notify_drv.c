@@ -1,6 +1,5 @@
 /* port_driver.c */
 
-#include <stdio.h>
 #include "erl_driver.h"
 #include <libnotify/notify.h>
 #include <stdio.h>

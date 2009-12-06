@@ -1,0 +1,19 @@
+.SUFFIXES: .erl .beam 
+
+ERLC = @ERLC@
+EBIN = ../ebin
+
+MODULES = enotify
+
+HRL_FILES= $(MEMSUP_HRL)
+ERL_FILES= $(MODULES:%=%.erl)
+
+ERL_COMPILE_FLAGS += -I$(INCLUDE) +warn_unused_vars +nowarn_shadow_vars +warn_unused_import +warn_obsolete_guard
+
+
+all:
+	$(ERLC) -o$(EBIN) enotify.erl
+
+
+.PRECIOUS: %.erl
+.PHONY: all
