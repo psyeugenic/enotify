@@ -1,4 +1,14 @@
 libnotify bindings to erlang
 
+Right now the only thing it can do is send a notify msg, which is fine for about 80% of all stuff I want to do, but then it is not a binding.
+
 To compile:
 autoconf && ./configure && make
+
+
+TODO:
+- Remove dependency for automake 2.64. Need different AC macros that can detect erlang installs
+
+- NIFify. Instead of a driver perhaps NIF? The problem is what to do with callbacks.
+
+- Implement a backend that behaves like notify bindings. i.e very explicit calls to the osd backend. Maybe use d-bus?
